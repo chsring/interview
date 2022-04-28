@@ -9,6 +9,7 @@
 
 ### 并发
 - [线程模型](./java基础/并发/线程模型.md)
+- [ThreadLocal](./java基础/并发/ThreadLocal.md)
 - [锁](./java基础/并发/锁.md)
 - [线程池](./java基础/并发/线程池.md)
 
