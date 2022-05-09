@@ -79,11 +79,11 @@
 
 #### View的Draw过程 和 ViewGroup的Draw过程
 ![img.png](../resource/View的Draw过程.png)
-- (1） drawBackground()：绘制背景；
--（2）保存当前的canvas层（不是必须的）；
--（3） onDraw()： 绘制View的内容，这是一个空实现，需要子View根据要绘制的颜色、线条等样式去具体实现，所以要在子View里重写该方法；
--（4） dispatchDraw()： 对所有子View进行绘制；单一View的dispatchDraw()方法是一个空方法，因为单一View没有子View，不需要实现dispatchDraw ()方法，而ViewGroup就不一样了，它实现了dispatchDraw()方法去遍历所有子View进行绘制；
--（5） onDrawForeground()：绘制装饰，比如滚动条；
+- drawBackground()：绘制背景；
+- 保存当前的canvas层（不是必须的）；
+- onDraw()： 绘制View的内容，这是一个空实现，需要子View根据要绘制的颜色、线条等样式去具体实现，所以要在子View里重写该方法；
+- dispatchDraw()： 对所有子View进行绘制；单一View的dispatchDraw()方法是一个空方法，因为单一View没有子View，不需要实现dispatchDraw ()方法，而ViewGroup就不一样了，它实现了dispatchDraw()方法去遍历所有子View进行绘制；
+- onDrawForeground()：绘制装饰，比如滚动条；
 ![img.png](../resource/ViewGroup的Draw过程.png)
 
 ### 刷新View的方法
