@@ -8,6 +8,46 @@
 - 重写onMeasure测量
 - 重写onLayout
 
+### Activity界面层级的刷新
+![img.png](../resource/Activity界面层级.png)
+- Activity的刷新是从上到下的，decorView都不存在，view是没办法刷新的 
+
+### View的绘制在Activity的哪个生命周期方法执行的？activity与window与view一起工作的？（图中两个流程都要掌握）
+![img.png](../resource/AMS与WMS交互.png)
+![img.png](../resource/handleResumeActivity.png)
+- ⚠️：在addView之后，setView中调用的requestLayout进行view的刷新
+- 在执行完 Activity的 onResume 方法之后,才真正开始了View的绘制工作
+- 1.AMS：UI的绘制实际上是在ActivityThread中 handleResumeActivity 方法中执行的， 首先会执行 ActivityClientRecord r = performResumeActivity(token, clearHide);而performResumeActivity就是内部最终会调用Activity的onResume生命周期。所以在onResume之前是没有进行ui绘制的
+- 2.WMS：handleResumeActivity中 ViewManager wm= a.getWindowManager()来获取（windowManager是从Framework层## Activity的onCreate之前执行的流程 涉及到创建的）
+- 3.window的出现是用来缓和activity和view的关系，绑定activity和view，建立联系之后ui就开始渲染了，所以activity启动的时候就会创建phonewindow同时创建WindowManager
+- 4.setContentView中会创建decorview，并未跟Activity产生联系，在 handleResumeActivity方法中 赋值给Activity.mDecor 才完成绑定
+- 5.之后 wm会调用UpdateViewLayout方法。（wm是在attach中建立的。wm实际上调用的mGlobal.updateViewLayout，WindowManagerGlobel是WindowManager的一个实现类，WM会把ui刷新会交给WindowManagerGlobel来进行，而WMG会把渲染交给ViewRootImpl来执行）
+- 6.WindowManagerGlobel#updateViewLayout中获取到ViewRootImpl对象root，调用它的 ViewRootImpl#setlayoutParams -> ViewRootImpl#setlayoutParams -> ViewRootImpl#requestLayout -> ViewRootImpl#scheduleTraversals（这才是ui绘制的起点）-> doTraversals() -> performTraversals()
+- 参考致谢：https://www.bilibili.com/video/BV1uK4y1G7Mo?p=3&spm_id_from=pageDriver
+
+### 为什么在子线程中不能更新ui
+```java
+@Override
+public void requestLayout() {
+        if (!mHandlingLayoutInLayoutRequest) { 
+            checkThread();
+            mLayoutRequested = true;
+            scheduleTraversals();
+        }
+}
+ 
+void checkThread() {
+        if (mThread != Thread.currentThread()) {
+            throw new CalledFromWrongThreadException(
+                    "Only the original thread that created a view hierarchy can touch its views.");
+        }
+    }
+```
+- 从以上的源码分析可得知，ViewRootImpl对象是在onResume方法回调之后才创建，那么就说明了为什么在生命周期的onCreate方法里，甚至是onResume方法里都可以实现子线程更新UI，因为此时还没有创建ViewRootImpl对象，并不会进行是否为主线程的判断；
+- scheduleTraversals()里是对View进行绘制操作，而在绘制之前requestLaout中，都会调用checkThread()检查当前线程是否为主线程mThread，如果不是主线程，就抛出异常；这样做法就限制了开发者在子线程中更新UI的操作；
+- 访问UI是没有加对象锁的，在子线程环境下更新UI，会造成不可预期的风险；
+- 参考致谢：https://blog.csdn.net/cpcpcp123/article/details/121779098
+
 ### View绘制和加载过程
 ![img.png](../resource/View与Window逻辑结构.png)
 ![img.png](../resource/View绘制.png)
@@ -59,10 +99,19 @@
 #### 如何正确获取View的测量宽高
 - onLayout()中去获取View的测量宽高和最终宽高，getMeasureWidth()和getMeasureHeight()用来获取测量宽高，getWidth()和getHeight()用来获取最终宽高。
 
-#### 在Activity启动时，如何正确获取一个View的宽高
+#### Handler与View的刷新关系
+- 
+
+#### 在Activity启动时，如何正确获取一个View的宽高？在onResume中获取高度有效吗？
+- 在首次执行onResume中getWidth与getHeigh无效，为0。因为执行onResume的时候，decor还未与activity绑定。
+- 首次onResume中可以 view.post(Runnable)或者new handler.postDelay(runnable,1000)可以
+- 再次调用onResume有效，再次调用时不会走onCreat，再次调用时已经完成了绘制。
 - 由于View的measure过程和Activity的生命周期是不同步的，所以无法保证Activity的onCreate()或者onResume()方法执行时某个View已经测量完毕，可以通过以下方法来解决：
 - （1）在onWindowFocusChanged()方法中获取View的宽高，该方法可能会被频繁调用；
 - （2）通过ViewTreeObserver的OnGlobalLayoutListener监听接口，当View树的状态发生改变或者View树内部的View的可见性发生改变时，就会回调onGlobalLayout()方法，在该方法中可以准确获取View的实际宽高；
+
+#### recycleview，listview，viewpager高度无效？
+- 都是因为onMeasure度量失效
 
 #### View的Layout过程
 - 首先调用View的layout()方法，在该方法中通过setFrame()方法来设定View的四个顶点的位置，即 初始化mLeft、mTop、mRight、mBottom这四个值，View的四个顶点一旦确定，那么View在父容器的位置也就确定了。
@@ -87,6 +136,7 @@
 ![img.png](../resource/ViewGroup的Draw过程.png)
 
 ### 刷新View的方法
+![img.png](../resource/invalidate刷新流程.png)
 - invalidate()： 不会经过measure和layout过程，只会调用draw过程；
 - requestLayout() ：会调用measure和layout过程重新测量大小和确定位置，不会调用draw过程。
 

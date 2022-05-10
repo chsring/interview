@@ -29,9 +29,10 @@
 - [四大组件](./android/基础/四大组件.md)
 - [Intent](./android/基础/Intent.md)
 - [Fragment](./android/基础/Fragment.md)
+- [App与Activity启动](./android/基础/Framework层.md)
 - [自定义View](./android/基础/自定义View.md)
 - [事件分发](./android/基础/事件分发.md)
-- [Handler](./android/基础/事件分发.md)
+- [Handler](./android/基础/Handler.md)
 
 
 ### 性能
@@ -41,6 +42,7 @@
 
 
 ### 设计模式
+- [View绘制理解设计模式-桥接模式](./android/设计模式/View绘制理解设计模式-桥接.md)
 
 
 ## 算法
