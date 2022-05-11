@@ -33,7 +33,8 @@
 - [自定义View](./android/基础/自定义View.md)
 - [事件分发](./android/基础/事件分发.md)
 - [Handler](./android/基础/Handler.md)
-
+- [Binder](./android/基础/Binder与AIDL.md)
+- [线程交互](./android/基础/Android线程之间交互.md)
 
 ### 性能
 

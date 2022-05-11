@@ -38,7 +38,7 @@
 ### AMS对Activity启动管理，Activity的启动流程
 - Activity启动最终会调用start()方法，而start()方法里面最终会跑到startActivity
 - startActivity最终会跑到startActivityForResult()，startActivityForResult()里面执行的是 Instrumentation.execStartActivity()
-- 通过Binder跨进程，执行的ATM的startActivity，接下来以此分析。首先来看是怎么拿到ATM服务的
+- 通过Binder跨进程，执行的AMS中的ATM的startActivity，接下来以此分析。首先来看是怎么拿到ATM服务的
 - 首先会调用AcitvityTaskManager.getService，而getService是通过ServiceManager通过代理模式拿到的ATM服务
 - 执行ATM的startActivity方法，判断需要启动的Activity所在的App进程是否已经启动
 - 如果进程存在，最终会执行到realStartActivityLocked方法，如果进程不存在，创建出进程后，最终也会执行到realStartActivityLocked方法
@@ -49,6 +49,7 @@
 - 参考致谢：https://www.jianshu.com/p/d6562ac93767
 - 参考致谢：https://www.bilibili.com/video/BV1TF411u7m2?spm_id_from=333.337.search-card.all.click
   ![img.png](../resource/Activity启动时序图.png)
+- ![img.png](../resource/Activity启动时序2.png)
 
 ### Activity的onCreate之前执行的流程
 ![img.png](../resource/Activity的onCreate之前流程.png)
