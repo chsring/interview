@@ -106,6 +106,7 @@ void checkThread() {
 #### 在Activity启动时，如何正确获取一个View的宽高？在onResume中获取高度有效吗？
 - 在首次执行onResume中getWidth与getHeigh无效，为0。因为执行onResume的时候，decor还未与activity绑定。
 - 首次onResume中可以 view.post(Runnable)或者new handler.postDelay(runnable,1000)可以，new handler.post(runnable)不可以。
+- 调用view.post方法并不是实时调用，而是被存储在RunQueue类中的集合 mActions中，等外部调用executeActions方法，而executeActions是在View的dispatchAttachedToWindow方法中被调用。
 - 因为addView中 都是用handler也是post一个消息；而onResume中直接post(runnable)消息是在刷新addView之前执行
 - 再次调用onResume有效，再次调用时不会走onCreat，再次调用时已经完成了绘制。
 - 由于View的measure过程和Activity的生命周期是不同步的，所以无法保证Activity的onCreate()或者onResume()方法执行时某个View已经测量完毕，可以通过以下方法来解决：

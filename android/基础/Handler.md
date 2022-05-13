@@ -4,6 +4,28 @@
 - handler中维护了一个消息队列
 - Activity启动的时候有很多handleXXX方法，要处理的这些都是Message
 - 所有类：Handler、Looper、Message、MessageQueue、Thread
+```java
+    public Handler(Callback callback, boolean async) {
+        if (FIND_POTENTIAL_LEAKS) {
+            final Class<? extends Handler> klass = getClass();
+            if ((klass.isAnonymousClass() || klass.isMemberClass() || klass.isLocalClass()) &&
+                    (klass.getModifiers() & Modifier.STATIC) == 0) {
+                Log.w(TAG, "The following Handler class should be static or leaks might occur: " +
+                    klass.getCanonicalName());
+            }
+        }
+
+        mLooper = Looper.myLooper();
+        if (mLooper == null) {
+            throw new RuntimeException(
+                "Can't create handler inside thread " + Thread.currentThread()
+                        + " that has not called Looper.prepare()");
+        }
+        mQueue = mLooper.mQueue;
+        mCallback = callback;
+        mAsynchronous = async;
+    }
+```
 
 ### MessageQueue类
 - MessageQueue是一个Message的单链表结构，用链表来做的队列，内部有 Message类型的 mMessage、Message 类型的 next；
@@ -11,6 +33,14 @@
 
 ### Looper类从消息队列中取消息
 - loop方法中，开启for死循环调用Message msg = queue.next()取消息。
+```java
+    private static void prepare(boolean quitAllowed) {
+        if (sThreadLocal.get() != null) {
+            throw new RuntimeException("Only one Looper may be created per thread");
+        }
+        sThreadLocal.set(new Looper(quitAllowed));
+    }
+```
 ```java
     public static void loop() {
         final Looper me = myLooper();

@@ -3,7 +3,7 @@
 - dex如何加载使用的，
 - apk打包流程
 - apk瘦身
-- 内存优化，冷启动优化，性能优化，卡顿优化
+- 保活，内存优化，冷启动优化，性能优化，卡顿优化
 - binder的使用原理，
 - 动态代理的使用场景，
 - AOP编程，
@@ -16,6 +16,7 @@
 - Glide 源码
 - EventBus 源码
 - databingding 
+- lifecycle
 - viewmodel 
 - MVP，MVVM 架构
 - leakCannery原理
