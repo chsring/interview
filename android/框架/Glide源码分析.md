@@ -266,7 +266,7 @@ public interface LifecycleListener {
 - 当调用put()方法时，就会在结合中添加元素，并调用trimToSize()判断缓存是否已满，如果满了就用LinkedHashMap的迭代器删除队首元素，即近期最少访问的元素。
 - 磁盘缓存 DiskLruCache(DiskLruCache会自动生成journal文件，这个文件是日志文件，主要记录的是缓存的操作)
 - DiskLruCache和LruCache内部都是使用了LinkedHashMap去实现缓存算法的，只不过前者针对的是将缓存存在本地，而后者是直接将缓存存在内存。
-#### 防止OOM
+#### 4.防止OOM
 - 软引用、LruCache、图片压缩、Bitmap像素存储位置
 - 软引用：LruCache里存的是软引用对象，那么当内存不足的时候，Bitmap会被回收，也就是说通过SoftReference修饰的Bitmap就不会导致OOM。
 - Bitmap被回收的时候，LruCache剩余的大小应该重新计算，可以写个方法，当Bitmap取出来是空的时候，LruCache清理一下，重新计算剩余内存；
@@ -276,6 +276,7 @@ public interface LifecycleListener {
 
 ### 参考致谢
 - https://blog.csdn.net/hymking/article/details/122134041
+- https://blog.csdn.net/a130226123/article/details/119325449#load_677
 
 
 

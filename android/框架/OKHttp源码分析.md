@@ -178,8 +178,11 @@ public Response intercept(Chain chain) throws IOException {
 - 拦截器的构造主要是在 AsuncCall#execute()中，通过getResponseWithInterceptorChain构造的
 - 责任链模式，行为行设计模式，责任链上的处理者负责处理请求，客户只需要将请求放到责任链上，无需关心请求处理的细节，责任链将请求的发送者和处理者解耦了
 
-
-
+### OkHttp3中使用到的设计模式
+- 责任链：拦截器
+- 建造者：OkHttpClientBulider
+- 工厂：CacheStartegy.Factory
+- 策略：CacheStartegy
 
 
 

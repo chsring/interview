@@ -39,7 +39,7 @@ interface GitHubApiService {
 - 发起请求
 ![img.png](resource/retrofit处理流程.png)
 #### create方法
-- 动态代理在retrofit中其实就是在运行期间去创建api接口对象。我们在使用时都会创建一个interface类，里面再添加一些接口方法。
+- 动态代理在retrofit中其实就是在运行期间通过反射机制来动态生成方法接口的代理对象。我们在使用时都会创建一个interface类，里面再添加一些接口方法。
 - 在create方法中return一个代理类，通过这种方式组建okhttp的request 和 Call 进行请求。
 ```java
 public <T> T create(final Class<T> service) {
@@ -237,6 +237,38 @@ public <T> Converter<ResponseBody, T> nextResponseBodyConverter(
 - 如果不是 Kotlin 挂起函数最终调用的是 CallAdapted 的 adapt方法
 - callAdapter 的实例是通过 callAdapterFactories 这个 list 通过遍历，根据返回值类型来选择合适的CallAdapter
 
+#### Retrofit涉及到的设计模式有哪些？
+##### 1.外观模式
+- 外观模式隐藏系统的复杂性，并向客户端提供了一个客户端可以访问系统的接口。这种类型的设计模式属于结构型模式，它向现有的系统添加一个接口，来隐藏系统的复杂性。
+- Retrofit 对客户端模块提供统一接口，Retrofit 类内部封装了 ServiceMethod、CallAdapter 和 Converter 等组件。并且 CallAdapter 和 Converter 都是抽象为接口，用户可以扩展自定义的实现。
+
+##### 2.动态代理 Proxy
+- Retrofit使用的是动态代理，是通过反射机制来动态生成方法接口的代理对象的。动态代理的实现是通过 JDK 提供的 InvocationHandler 接口，实现该接口重写其调用方法 invoke
+
+##### 3.建造者模式 Builder
+- 建造者模式属于创建型模式，将构建复杂对象的过程和它的部件解耦，使构建过程和部件的表示隔离。
+- Retrofit 内部包含 Retrofit.Builder，Retrofit 包含的域都能通过 Builder 进行构建
+
+##### 4.适配器模式 Adapter
+- 适配器提供客户类需要的接口，适配器的实现就是把客户类的请求转化为对适配者的相应接口的调用。
+- Retrofit 中的 CallAdapter 的接口，让已经存在的OkHttpCall，被不同的标准、平台来调用，让其他平台做不同的实现来转换。
+
+##### 5.工厂模式
+- 创建型模式，其主要功能都是将对象的实例化部分抽取出来。只需要传给工厂一些参数信息，工厂解析参数返回相应的产品。对外隐藏产品细节，逻辑简单。一个工厂只生产一种产品，所有的工厂都实现同一个抽象接口。
+- 比如 RxJavaCallAdapterFactory，ConverterFactory等
+
+##### 6.策略模式
+- 完成一项任务，往往可以有多种不同的方式，每一种方式称为一个策略，我们可以根据环境或者条件的不同选择不同的策略来完成该项任务
+- RxJavaCallAdapterFactory 的 get 方法返回 SimpleCallAdapter 对象（或 ResultCallAdapter 对象）就对应具体的策略实现
+
+#### 7.观察者
+- 在 OkHttpCall 的 enqueue 实现方法中，通过在 okhttp3.Callback() 的回调方法中调用上述入参 Callback 对象的方法，实现通知观察者。
+
+
+作者：Ava_T
+链接：https://www.jianshu.com/p/435a5296ee94
+来源：简书
+著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
 
 ### 参考致谢
 - https://zhuanlan.zhihu.com/p/421401880
