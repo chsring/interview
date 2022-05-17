@@ -9,7 +9,7 @@
 - PMS⽤来管理所有的package信息，包括安装、卸载、更新以及解析AndroidManifest.xml以组织相应的数据结构，这些数据结构将会被PMS、ActivityMangerService等等service和application使⽤到
 
 ### App启动流程
-![img.png](../resource/Activity的启动流程.png)
+![img.png](resource/Activity的启动流程.png)
 #### 四大进程
 - Launcher进程：app启动流程的起点，负责接收用户点击屏幕事件
 - app进程：你要启动的app所运行的进程。
@@ -48,11 +48,11 @@
 - AMS执行到realStartActivityLocked方法，去启动Activity，执行activity生命周期
 - 参考致谢：https://www.jianshu.com/p/d6562ac93767
 - 参考致谢：https://www.bilibili.com/video/BV1TF411u7m2?spm_id_from=333.337.search-card.all.click
-  ![img.png](../resource/Activity启动时序图.png)
-- ![img.png](../resource/Activity启动时序2.png)
+  ![img.png](resource/Activity启动时序图.png)
+- ![img.png](resource/Activity启动时序2.png)
 
 ### Activity的onCreate之前执行的流程
-![img.png](../resource/Activity的onCreate之前流程.png)
+![img.png](resource/Activity的onCreate之前流程.png)
 - 在启动activity的时候，ActivityThread 会调用scheduleLaunchActivity -> handleLaunchActivity -> performLaunchActivity
 - 在 performLaunchActivity 中会调用Activity的attach方法创建PhoneWindow并却与Activity绑定，同时创建windowManager
 - 之后ActivityThread 会调用 Instrumentation的 callActivityOnCreat 方法，callActivityOnCreat 会调用 Activity 的onCreate方法

@@ -1,5 +1,5 @@
 ### Handler 安卓的心脏
-![img.png](../resource/Handler所有类.png)
+![img.png](resource/Handler所有类.png)
 - service管理，点击事件、生命周期、view刷新、按键、一切等都是一个Message
 - handler中维护了一个消息队列
 - Activity启动的时候有很多handleXXX方法，要处理的这些都是Message
@@ -301,7 +301,7 @@
 - 任意多个，可以new出来多个
 
 ### 一个线程有几个Looper，如何保证
-![img.png](../resource/ThreadLocal与Looper.png)
+![img.png](resource/ThreadLocal与Looper.png)
 - 一个线程只有一个Looper；
 - thread 和 looper 关系：looper函数的执行是由线程启动的：
 - 主线程中：好像不关注Looper的存在；主线程的looper在 ActivityThread#main 方法中启动的（main方法的执行意味着zygote成功的为我们的应用分配了虚拟机）
@@ -441,7 +441,7 @@ synchronized 修饰静态方法
 - 取消息：
 - 取消息也是一样的，MessageQueue#next方法中也是用synchronize锁的this
 - 这就是生产者消费者模式，这就是保证无论何时都只有一个线程存放msg和取msg
-![img.png](../resource/生产者消费者.png)
+![img.png](resource/生产者消费者.png)
 
 ### 我们使用Message时应该如何创建它
 - 我们会obtain一个消息，这就是消息管理机制

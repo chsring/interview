@@ -9,12 +9,12 @@
 - 重写onLayout
 
 ### Activity界面层级的刷新
-![img.png](../resource/Activity界面层级.png)
+![img.png](resource/Activity界面层级.png)
 - Activity的刷新是从上到下的，decorView都不存在，view是没办法刷新的 
 
 ### View的绘制在Activity的哪个生命周期方法执行的？activity与window与view一起工作的？（图中两个流程都要掌握）
-![img.png](../resource/AMS与WMS交互.png)
-![img.png](../resource/handleResumeActivity.png)
+![img.png](resource/AMS与WMS交互.png)
+![img.png](resource/handleResumeActivity.png)
 - ⚠️：addView是创建流程，在addView之后，setView中调用的requestLayout进行view的刷新
 - 在执行完 Activity的 onResume 方法之后,才真正开始了View的绘制工作
 - 1.AMS：UI的绘制实际上是在ActivityThread中 handleResumeActivity 方法中执行的， 首先会执行 ActivityClientRecord r = performResumeActivity(token, clearHide);而performResumeActivity就是内部最终会调用Activity的onResume生命周期。所以在onResume之前是没有进行ui绘制的
@@ -50,8 +50,8 @@ void checkThread() {
 - 参考致谢：https://blog.csdn.net/cpcpcp123/article/details/121779098
 
 ### View绘制和加载过程
-![img.png](../resource/View与Window逻辑结构.png)
-![img.png](../resource/View绘制.png)
+![img.png](resource/View与Window逻辑结构.png)
+![img.png](resource/View绘制.png)
 - ViewRoot对应于ViewRootImpl类，它是连接WindowManager和DecorView的纽带，View的绘制流程开始于ViewRoot的performTraversals()方法，只有经过measure、layout、draw三个流程才能最终把View绘制出来
 - 当Activity对象创建完毕后，会将DecorView添加到Window中，同时会创建ViewRootImpl对象，并将该对象和DecorView建立关联，在ViewRootImpl里面performTraversals分发。
 - 这个流程在onCreate之前，所以会有一段时间的黑屏、白屏。所以在启动的时候解决黑白屏问题，我们会设置主题，因为在onCreate之前会把主题设置进来，之后才会加载xml布局中的问题。
@@ -61,14 +61,14 @@ void checkThread() {
 - onLayout和onDraw跟measure方法类似
 
 #### View的measure过程
-![img.png](../resource/View的Measure过程.png)
+![img.png](resource/View的Measure过程.png)
 - View的测量过程首先会调用View的measure()方法，而measure()方法又会调用onMeasure()方法实现具体的测量。onMeasure()主要通过setMeasuredDimension()方法来设置View宽高的测量值
 - View的实际测量宽高是通过getDefaultSize()方法来获取的（返回值实际上就是View的SpecSize），该方法的主要逻辑是：根据传进来的View的MeasureSpec，获取对应的SpecMode值和SpecSize值，并判断SpecMode三种测量模式下对应的View的SpecSize的取值。
 - 在这里主要关注EXACTLY和AT_MOST两种模式，这两种模式下都是直接返回View的SpecSize值，这个SpecSize就是View的测量宽高大小。
 - UNSPECIFIED测量模式的话，则会使用getSuggestedMinimumWidth()和getSuggestedMinimumHeight()提供的默认大小，那么默认大小是多少呢？通过getSuggestedMinimumWidth()方法可以看到：如果View没有设置背景，那么View的测量宽度等于XML布局文件中android:minWidth属性指定的值，如果没有指定则默认为0；如果View设置了背景，那么View的测量宽度等于android:minWidth属性指定的值与背景图Drawable的原始宽度（若无原始宽度则默认为0）两者中的最大值。
 
 #### ViewGroup的measure过程
-![img.png](../resource/ViewGroup的measure过程.png)
+![img.png](resource/ViewGroup的measure过程.png)
 - ViewGroup的测量过程除了完成自身的测量之外，还会遍历去调用子View的measure()方法。
 - ViewGroup是一个抽象类，没有重写View的onMeasure()方法，所以需要子类去实现onMeasure()方法规定具体的测量规则。
 - ViewGroup子类复写onMeasure()方法一般有如下三个步骤：
@@ -121,7 +121,7 @@ void checkThread() {
 - 接着会调用onLayout()方法确定所有子View在父容器中的位置，由于是单一View的layout过程，所以 onLayout()方法为空实现，因为没有子View（如果是ViewGroup需要子类实现 onLayout()方法）。
 
 #### ViewGroup的Layout过程
-![img.png](../resource/ViewGroup的Layout过程.png)
+![img.png](resource/ViewGroup的Layout过程.png)
 - 首先会调用自身layout()方法，但和View的layout过程不一样的是，ViewGroup需要子类实现onLayout()方法，循环遍历所有的子View并调用其layout()方法确定子View的位置，从而最终确定ViewGroup在父容器的位置。
 
 #### 如何实现ViewGroup的onLayout()，以LinearLayout为例
@@ -130,16 +130,16 @@ void checkThread() {
 - 在setChildFrame()中调用子View的layout()来确定每个子View的位置，从而最终确定自身的位置。
 
 #### View的Draw过程 和 ViewGroup的Draw过程
-![img.png](../resource/View的Draw过程.png)
+![img.png](resource/View的Draw过程.png)
 - drawBackground()：绘制背景；
 - 保存当前的canvas层（不是必须的）；
 - onDraw()： 绘制View的内容，这是一个空实现，需要子View根据要绘制的颜色、线条等样式去具体实现，所以要在子View里重写该方法；
 - dispatchDraw()： 对所有子View进行绘制；单一View的dispatchDraw()方法是一个空方法，因为单一View没有子View，不需要实现dispatchDraw ()方法，而ViewGroup就不一样了，它实现了dispatchDraw()方法去遍历所有子View进行绘制；
 - onDrawForeground()：绘制装饰，比如滚动条；
-![img.png](../resource/ViewGroup的Draw过程.png)
+![img.png](resource/ViewGroup的Draw过程.png)
 
 ### 刷新View的方法
-![img.png](../resource/invalidate刷新流程.png)
+![img.png](resource/invalidate刷新流程.png)
 - invalidate()： 不会经过measure和layout过程，只会调用draw过程；
 - requestLayout() ：会调用measure和layout过程重新测量大小和确定位置，不会调用draw过程。
 

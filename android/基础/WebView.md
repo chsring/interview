@@ -102,4 +102,4 @@ override fun onDestroy() {
 - JSBridge 就像其名称中的Bridge的意义⼀样，是 Native 和⾮ Native 之间的桥梁，它的核⼼是构建 Native 和⾮ Native 间消息通信的通道，⽽且这个通信的通道是双向的。
 - JS 调⽤ Native 逻辑：接收到 JavaScript 消息 => 解析参数，拿到 bridgeName、data 和 callbackId => 根据 bridgeName 找到功能⽅法，以 data 为参数执⾏ => 执⾏返回值和 callbackId ⼀起回传前端。
 - Native调⽤ JS 也同样简单，直接⾃动⽣成⼀个唯⼀的 ResponseId，并存储句柄，然后和 data ⼀起发送给前端即可。
-![img.png](../resource/JSBridge.png)
+![img.png](resource/JSBridge.png)

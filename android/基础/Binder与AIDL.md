@@ -26,20 +26,20 @@
 - 对传输过程，Binder是可以进行跨进程传递的对象，会自动完成服务器和客户端对象转换
 
 ### 为什么使用binder
-![img.png](../resource/Binder性能.png)
+![img.png](resource/Binder性能.png)
 - Android使用Linux内核，它有很多快进程通信机制，IPC通信，如管道，消息队列，共享内存，信号量，socket，文件等
 - 性能：广泛IPC会提出性能要求
 - 安全：传统IPC没有对通信双方进行身份验证，Binder双方支持通信双方身份校验
 
 ### Binder通信模型
 - 客户端持有一个服务代理，代理对象协助驱动，完成跨进程通信。
-![img.png](../resource/Binder机制.png)
+![img.png](resource/Binder机制.png)
 - 1.Server在ServiceManager，注册某方法add
 - 2.Client从ServiceManager中查询是否有该方法，如果有，SM会返回Client一个代理空方法。
 - 3.当Client调用该方法时，他会返回给内核驱动，内核驱动调用Server的add方法，把结果返回给驱动，驱动返回给Client
 
 ### Binder是如何做到一次拷贝的
-![img.png](../resource/Binder机制跨进程.png)
+![img.png](resource/Binder机制跨进程.png)
 - Binder机制中，接收方的用户空间 与 共享的内核空间 有一块共享区域的物理内存，这样用户空间就可以直接拿到 共享区域的数据了。
 - 而共享内存机制无需拷贝，是因为 发送方和接收方都映射到同一块内存了，容易导致死锁
 

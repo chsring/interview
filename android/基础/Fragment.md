@@ -11,8 +11,8 @@
 - FragmentStatePagerAdaper 用于页面较多，每次切换都会回收内存，在destroyItem方法中，调用了remove方法，真正释放了内存，节省内存。
 
 ### Fragment生命周期
-![img.png](../resource/Fragment生命周期.png)
-![img.png](../resource/生命周期交织.png)
+![img.png](resource/Fragment生命周期.png)
+![img.png](resource/生命周期交织.png)
 
 ### Fragment之间的通信
 - 在Fragment中调用Activity方法：getActivity方法会获得Activity对象
