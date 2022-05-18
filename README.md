@@ -46,6 +46,12 @@
 - [OKHttp源码分析](./android/框架/OKHttp源码分析.md)
 - [Retrofit源码分析](./android/框架/Retrofit源码分析.md)
 - [Glide源码分析](./android/框架/Glide源码分析.md)
+- [LeakCannary原理解析](./android/框架/LeakCannary原理解析.md)
+
+### 架构
+- [MVP、MVVM架构](./android/框架/MVP、MVVM架构.md)
+- [MVVM与Jetpack架构之DataBinding](./android/框架/MVVM与Jetpack架构之DataBinding.md)
+- [MVVM与Jetpack架构之ViewModel](./android/框架/MVVM与Jetpack架构之ViewModel.md)
 
 ### 设计模式
 - [View绘制理解设计模式-桥接模式](./android/设计模式/View绘制理解设计模式-桥接.md)
