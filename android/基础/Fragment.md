@@ -19,6 +19,7 @@
 - 在Activity中调用Fragment方法：通过接口回调
 - Fragment中调用Fragment方法：getActivity 获取到Activity，findFragmentById 获取Fragment
 - Activity在创建的时候通过Bundle传输数据
+- viewmodel
 
 ### FragmentManageer中方法
 - repalce：销毁原有的Fragment，创建新的Fragemnt

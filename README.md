@@ -46,7 +46,9 @@
 - [OKHttp源码分析](./android/框架/OKHttp源码分析.md)
 - [Retrofit源码分析](./android/框架/Retrofit源码分析.md)
 - [Glide源码分析](./android/框架/Glide源码分析.md)
+- [组件化之ARouter原理解析](./android/框架/ARouter原理解析.md)
 - [LeakCannary原理解析](./android/框架/LeakCannary原理解析.md)
+- [BlockCannery原理解析](./android/框架/BlockCannery原理解析.md)
 
 ### 架构
 - [MVP、MVVM架构](./android/框架/MVP、MVVM架构.md)
