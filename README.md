@@ -40,7 +40,7 @@
 - [线程交互](./android/基础/Android线程之间交互.md)
 
 ### 性能
-
+- [屏幕适配](./android/性能/屏幕适配.md)
 
 ### 三方框架
 - [OKHttp源码分析](./android/框架/OKHttp源码分析.md)
@@ -56,6 +56,10 @@
 - [MVVM与Jetpack架构之ViewModel](./android/框架/MVVM与Jetpack架构之ViewModel.md)
 
 ### 设计模式
+- [六大原则](./android/设计模式/六大原则.md)
+- [单例模式](./android/设计模式/单例模式.md)
+- [工厂模式](./android/设计模式/工厂模式.md)
+- [代理模式](./android/设计模式/代理模式.md)
 - [View绘制理解设计模式-桥接模式](./android/设计模式/View绘制理解设计模式-桥接.md)
 
 
