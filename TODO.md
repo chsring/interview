@@ -15,9 +15,8 @@
 - 如何实现一个长连接，
 - 如何实现捕捉所有view的onClick时间，并打出日志
 
-- RxJava
-
-- ARoute 源码
+- RxJava 中的观察者
+- 策略+工厂模式
 
 - EventBus 源码
 
