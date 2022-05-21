@@ -41,6 +41,10 @@
 
 ### 性能
 - [屏幕适配](./android/性能/屏幕适配.md)
+- [卡顿优化](./android/性能/卡顿优化.md)
+- [Carsh优化](./android/性能/Carsh优化.md)
+- [内存优化](./android/性能/内存优化.md)
+- [启动优化](./android/性能/启动优化.md)
 
 ### 三方框架
 - [OKHttp源码分析](./android/框架/OKHttp源码分析.md)

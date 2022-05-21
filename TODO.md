@@ -8,7 +8,7 @@
 - 内存优化，内存泄漏
 - 冷启动优化，
 - 卡顿优化
-
+- 优化系列课程：https://www.bilibili.com/video/BV1T44y1u7g6?spm_id_from=333.1007.top_right_bar_window_history.content.click
 - AOP编程，
 
 - 自定义注解，反射
