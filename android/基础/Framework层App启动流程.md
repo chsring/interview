@@ -1,4 +1,4 @@
-### 的AMS，PMS，以及WMS等都是运⾏在system_server这个进程中的线程
+### AMS，PMS，以及WMS等都是运⾏在system_server这个进程中的线程
 #### AMS
 - ActivityManagerService 简称AMS，是Android内核的核心功能之一，在系统启动SystemServer时启动此服务。 AMS在Android系统中扮演很重要的角色，主要负责系统中四大组件的启动、切换、调度及应用进程的管理和调度等工作，其职责与操作系统中的进程管理和调度模块相类似。当发起进程启动或者组件启动时，都会通过Binder通信机制将请求传递给AMS，AMS再做统一处理。
 
