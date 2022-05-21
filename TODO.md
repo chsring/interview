@@ -9,7 +9,7 @@
 - 冷启动优化，
 - 卡顿优化
 - 优化系列课程：https://www.bilibili.com/video/BV1T44y1u7g6?spm_id_from=333.1007.top_right_bar_window_history.content.click
-- AOP编程，
+- AOP编程， 字节码插桩 https://blog.csdn.net/shulianghan/article/details/120298969
 
 - 自定义注解，反射
 - 如何实现一个长连接，
