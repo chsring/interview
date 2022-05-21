@@ -1,5 +1,5 @@
 ### WebView的启动过程
-![img.png](WebView的启动过程.png)
+![img.png](resource/WebView的启动过程.png)
 
 ### 如何提高WebView的加载速度
 #### 1.常规设置
