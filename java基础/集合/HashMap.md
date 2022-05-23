@@ -160,52 +160,74 @@ final V putVal(int hash, K key, V value, boolean onlyIfAbsent,boolean evict) {
         }
     }
 ```
+#### putVal中三次调用resize()方法
+- 1.初始化HashMap的默认扩容一个cap为16 threshold为12的Node<K, V>[] newTab
+- 2.当hashMap的size>threshold的时候再次扩容,扩容为16*2的cap,threshold*2的Node<K, V>[] newTab
+- 3.当table中Node链表大于8且tab.length小于64的时候,hash再次double扩容
+
+### 扩容过程
+- 第一阶段：算出新数组长度和新数组扩容阈值，创建新数组
+- 第二阶段：扩容前的数组元素迁移到扩容后的数组当中去。主要分为单个元素的迁移，链表的迁移，红黑树的迁移
 ```java
-    final Node<K,V>[] resize() {
-        Node<K,V>[] oldTab = table;                 // table:null  oldTab:null
-        int oldCap = (oldTab == null) ? 0 : oldTab.length;  //oldCap:0
-        int oldThr = threshold;                     // oldThr:如果掉有参构造器，则会赋初值
+   //    HashMap的扩容
+final HashMap.Node<K,V>[] resize() {
+//        获取到老的HashMap
+        HashMap.Node<K,V>[] oldTab = table;
+//        判断老HashMap是否为null，如果为null的话oldCap = 0，反之 oldCap = Map.length
+        int oldCap = (oldTab == null) ? 0 : oldTab.length;
+//        threshold为HashMap的扩容因子乘于HashMap的容量，也就是HashMap中存储的数据达到threshold时会触发扩容。
+        int oldThr = threshold;
+//        定义新HashMap的长度和threshold为0
         int newCap, newThr = 0;
-        
+//        如果老HashMap长度大于0的话，会进行oldCap >= MAXIMUM_CAPACITY判断，也就是说，当前的老HashMap的容量是否超过了HashMAp规定的最大容量2**32，如果超过了
+//        会将threshold赋值为Integer.MAX_VALUE，然后返回老的HashMap，也就是不进行扩容了，HashMap已经达到最大了。
+//        如果老HashMap的容量在扩容一倍之后依然小于MAXIMUM_CAPACITY（newCap = oldCap << 1这行代码就是将oldCap右移一位，相当于newCAp=2*oldCap），
+//        并且老HashMap的容量大于HashMap的初始容量16的话，就会进行代码newThr = oldThr << 1;，这时新HashMap的threshold为oldThr*2
+//
         if (oldCap > 0) {
             if (oldCap >= MAXIMUM_CAPACITY) {
                 threshold = Integer.MAX_VALUE;
                 return oldTab;
-            }
-            else if ((newCap = oldCap << 1) < MAXIMUM_CAPACITY &&
-                     oldCap >= DEFAULT_INITIAL_CAPACITY)
-                newThr = oldThr << 1; // double threshold 
-        }
-        else if (oldThr > 0) // initial capacity was placed in threshold
-            newCap = oldThr;        
+            }else if ((newCap = oldCap << 1) < MAXIMUM_CAPACITY && oldCap >= DEFAULT_INITIAL_CAPACITY)
+                 newThr = oldThr << 1; // double threshold
+        }else if (oldThr > 0) // initial capacity was placed in threshold
+            newCap = oldThr;
         else {               // zero initial threshold signifies using defaults
             newCap = DEFAULT_INITIAL_CAPACITY;
             newThr = (int)(DEFAULT_LOAD_FACTOR * DEFAULT_INITIAL_CAPACITY);
         }
-        
-        if (newThr == 0) {          //对 newThr 赋值 
+        //        在代码newThr = oldThr << 1;中newThr已经为oldThr的二倍了，不可以进入这个判断。
+        if (newThr == 0) {
             float ft = (float)newCap * loadFactor;
-            newThr = (newCap < MAXIMUM_CAPACITY && ft < (float)MAXIMUM_CAPACITY ?
-                      (int)ft : Integer.MAX_VALUE);
+            newThr = (newCap < MAXIMUM_CAPACITY && ft < (float)MAXIMUM_CAPACITY ?(int)ft : Integer.MAX_VALUE);
         }
-        
-        threshold = newThr;  //把newThr赋值给 threshold
+//        将扩容的触发容量设置为newThr
+        threshold = newThr;
+//        创建一个新的HashMap
         @SuppressWarnings({"rawtypes","unchecked"})
-        Node<K,V>[] newTab = (Node<K,V>[])new Node[newCap];     //创建 Node数组 给底层主数组table赋值
+        HashMap.Node<K,V>[] newTab = (HashMap.Node<K,V>[])new HashMap.Node[newCap];
+//        将table设置为新的HashMap
         table = newTab;
+//        如果老HashMap不为null的话，开始进行扩容。
         if (oldTab != null) {
+        //            遍历老HashMap
             for (int j = 0; j < oldCap; ++j) {
-                Node<K,V> e;
+//                创建一个节点e，并将当前遍历到的节点赋值给e。如果e不为null的话，就将所遍历到的这个节点设置为null
+                HashMap.Node<K,V> e;
                 if ((e = oldTab[j]) != null) {
                     oldTab[j] = null;
+//                    如果e的下一个节点为null的话，单个元素直接复制
                     if (e.next == null)
+//                        e.hash & (newCap - 1)是在给e计算它在newHashMap中的位置。
                         newTab[e.hash & (newCap - 1)] = e;
-                    else if (e instanceof TreeNode)
-                        ((TreeNode<K,V>)e).split(this, newTab, j, oldCap);
-                    else { // preserve order
-                        Node<K,V> loHead = null, loTail = null;
-                        Node<K,V> hiHead = null, hiTail = null;
-                        Node<K,V> next;
+//                    如果e.next补位null，会判断e的结构是红黑树还是链表。
+                    else if (e instanceof HashMap.TreeNode)
+//                        如果e这个entry是红黑树的话，如果是树，调用树的复制方法
+                        ((HashMap.TreeNode<K,V>)e).split(this, newTab, j, oldCap);
+                    else { // preserve order 如果是链表，循环链表复制
+                        HashMap.Node<K,V> loHead = null, loTail = null;
+                        HashMap.Node<K,V> hiHead = null, hiTail = null;
+                        HashMap.Node<K,V> next;
                         do {
                             next = e.next;
                             if ((e.hash & oldCap) == 0) {
@@ -214,8 +236,7 @@ final V putVal(int hash, K key, V value, boolean onlyIfAbsent,boolean evict) {
                                 else
                                     loTail.next = e;
                                 loTail = e;
-                            }
-                            else {
+                            }else {
                                 if (hiTail == null)
                                     hiHead = e;
                                 else
@@ -223,6 +244,7 @@ final V putVal(int hash, K key, V value, boolean onlyIfAbsent,boolean evict) {
                                 hiTail = e;
                             }
                         } while ((e = next) != null);
+                        
                         if (loTail != null) {
                             loTail.next = null;
                             newTab[j] = loHead;
@@ -236,7 +258,7 @@ final V putVal(int hash, K key, V value, boolean onlyIfAbsent,boolean evict) {
             }
         }
         return newTab;
-    }
+  }
 ```
 #### Node<K,V>[]数组的下标是用的(n - 1) & hash这样得到的,这样做的好处
 - (n - 1) & hash实际上是对表长求膜运算，使用位运算提升了运算速度
@@ -248,7 +270,7 @@ final V putVal(int hash, K key, V value, boolean onlyIfAbsent,boolean evict) {
 - 就算在构造函数中 传入任意的容量大小，最终都会把它转换成2的n次幂
 #### 链表大于8就会树化吗
 - 当HashMap中的其中一个链表的对象个数如果达到了8个，此时如果数组长度没有达到64，那么HashMap会先扩容解决，如果已经达到了64，那么这个链表会变成红黑树，节点类型由Node变成TreeNode类型。当然，如果映射关系被移除后，下次执行resize方法时判断树的节点个数低于6，也会再把树转换为链表。
-#### putVal中三次调用resize()方法
+
 #### 树化时为什么是红黑树 不是 AVL树
 - AVL树 牺牲了插入性能，提高了查询性能，当左右子树高度超过2时便会 左旋右旋。
 - 红黑树 取得一个点，平衡了插入性能和查询性能，它保证 最长子树不超过最短子树的两倍。
