@@ -10,7 +10,7 @@
 - [接口和抽象类](./java基础/接口和抽象类.md)
 - [注解](./java基础/注解.md)
 - [引用类型](./java基础/引用类型.md)
-- [JVM](./java基础/JVM.md)
+- [类加载与JVM](./java基础/JVM.md)
 ### 集合
 - [ArrayList与LinkedList](./java基础/集合/ArrayList与LinkedList.md)
 - [HashMap](./java基础/集合/HashMap.md)
