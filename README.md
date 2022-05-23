@@ -3,7 +3,8 @@
   
 ## Java篇
 - [面向对象](./java基础/面向对象.md)
-- [final关键字](./java基础/final关键字.md)
+- [final、finally、finalize、Serializable和Parcelable](./java基础/final关键字.md)
+- [静态类、静态方法、成员内部类、静态内部类、局部内部类、和匿名内部类的理解](./java基础/静态类、静态方法、成员内部类、静态内部类、局部内部类、和匿名内部类的理解.md)
 - [StringBulider和StringBuffer](./java基础/StringBulider和StringBuffer.md)
 - [equal与hashCode](./java基础/equal与hashCode.md)
 - [接口和抽象类](./java基础/接口和抽象类.md)
