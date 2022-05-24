@@ -1,5 +1,5 @@
 ## ThreadLocal
-- ThreadLocal 提供了线程本地的实例。它与普通变量的区别在于，每个使用该变量的线程都会初始化一个完全独立的实例副本，该变量对其他线程而言是隔离的。ThreadLocal 变量通常被private static修饰。当一个线程结束时，它所使用的所有 ThreadLocal 相对的实例副本都可被回收。
+- ThreadLocal 提供了线程本地的实例。每个使用该变量的线程都会初始化一个完全独立的实例副本，它对其他线程而言是隔离的。ThreadLocal 变量通常被private static修饰。当一个线程结束时，它所使用的所有 ThreadLocal 相对的实例副本都可被回收。
 - ThreadLocal 适用于每个线程需要自己独立的实例且该实例需要在多个方法中被使用，也即变量在线程间隔离而在方法或类间共享的场景
 - ThreadLocal 天然隔离线程的作用，一个线程往里放内容，但是其他线程是拿不到的。
 - ThreadLocal 应用与spring的transtion事物，mybatis关于分页处理
