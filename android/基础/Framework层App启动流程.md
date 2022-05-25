@@ -31,7 +31,7 @@
 - ④app进程，通过Binder向sytem_server进程发起attachapplication请求
 - ⑤system_server进程在收到请求后，进行一系列准备工作后，再通过binder向app进程发送scheduleLaunchActivity请求
 - ⑥app进程的applicationThread线程在收到请求后，通过handler向主线程发送LAUNCH_ACTIVITY消息
-- ⑦主线程在收到Message后，通过发射机制创建目标Activity，并回调Activity.onCreate()等方法。
+- ⑦主线程在收到Message后，通过反射机制创建目标Activity，并回调Activity.onCreate()等方法。
 - ⑧到此，app便正式启动，开始进入Activity生命周期，执行完onCreate/onStart/onResume方法，UI渲染结束后便可以看到app的主界面。
 - 参考致谢：https://baijiahao.baidu.com/s?id=1730780037727135079&wfr=spider&for=pc
 
