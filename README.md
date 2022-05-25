@@ -39,6 +39,7 @@
 - [Handler](./android/基础/Handler.md)
 - [Binder](./android/基础/Binder与AIDL.md)
 - [线程交互](./android/基础/Android线程之间交互.md)
+- [App编译流程](./android/基础/App编译打包过程.md)
 
 ### 性能
 - [屏幕适配](./android/性能/屏幕适配.md)
