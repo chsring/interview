@@ -140,8 +140,9 @@ void checkThread() {
 
 ### 刷新View的方法
 ![img.png](resource/invalidate刷新流程.png)
-- invalidate()： 不会经过measure和layout过程，只会调用draw过程；
-- requestLayout() ：会调用measure和layout过程重新测量大小和确定位置，不会调用draw过程。
+- invalidate()： 该方法递归调用父View的invalidateChildInParent()方法，直到调用ViewRootImpl的invalidateChildInParent()方法，最终触发ViewRootImpl的performTraversals()方法，此时mLayoutRequested为false，不会触发onMesaure()与onLayout()方法，但是会触发onDraw()方法 ；所以如果仅仅是内容的改变不涉及宽高和位置的改变，可以使用这个。
+- postInvalidate()：该方法功能和invalidate()一样，只是它可以在非UI线程中调用。
+- requestLayout() ：该方法会递归调用父窗口的requestLayout()方法，直到触发ViewRootImpl的performTraversals()方法，此时mLayoutRequested为true，会触发onMesaure()与onLayout()方法，不一定会触发onDraw()方法。如果是改变了目标控件的大小和位置则需要使用。
 
 ### 参考致谢
 - https://www.jianshu.com/p/a5ea8174d912
