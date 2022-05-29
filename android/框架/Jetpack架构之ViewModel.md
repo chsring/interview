@@ -129,3 +129,9 @@ public ViewModelStore getViewModelStore() {
 
 ```
 
+### Activity横竖屏切换
+- 在横竖屏切换的时候会调用ActivityThread中的handleRelaunchActivity方法，handleRelaunchActivity方法的核心是handleRelaunchActivityInner方法，在handleRelaunchActivityInner方法中处理了activity的销毁和重建，在销毁之前把ViewModelStore保存到NonConfigurationInstances起来，在重建的时候把保存的数据通过Activity的attach方法传入新的Activity中，这样就实现了ViewModel在横竖屏切换的时候不会丢失。
+
+### 注意点
+- 不要向viewmodel中传入Activity的Context，否则会内存泄漏
+- 如果要是用Context，就是用AndroidViewmodle的Application
