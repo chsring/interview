@@ -61,6 +61,9 @@
 - [MVP、MVVM架构](./android/框架/MVP、MVVM架构.md)
 - [MVVM与Jetpack架构之DataBinding](./android/框架/MVVM与Jetpack架构之DataBinding.md)
 - [MVVM与Jetpack架构之ViewModel](./android/框架/MVVM与Jetpack架构之ViewModel.md)
+- [Lifecycle](./android/框架/Lifecycle.md)
+- [Rxjava](./android/框架/RxJava.md)
+
 
 ### 设计模式
 - [六大原则](./android/设计模式/六大原则.md)
