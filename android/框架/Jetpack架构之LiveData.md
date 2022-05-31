@@ -1,3 +1,17 @@
+### 使用
+```java
+liveData.observe(this,Observer<String>()){
+    public void onChanged(String data){
+        
+    }
+}
+```
+
+- Livedata是一个观察者，可以观察到Activity和Fragment生命周期的变化，通过lifecycle完成观察者被观察者的绑定
+- 同时也是被观察者，例如数据变化时，会发送一个通知告诉观察者。
+- Livedata有两个方法，setValue():主线程发消息，postValue():从子线程发消息 
+
+
 ### Livedata使用与实现原理
 
 
