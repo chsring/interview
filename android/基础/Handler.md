@@ -43,107 +43,20 @@
 ```
 ```java
     public static void loop() {
-        final Looper me = myLooper();
-        if (me == null) {
-            throw new RuntimeException("No Looper; Looper.prepare() wasn't called on this thread.");
-        }
-        final MessageQueue queue = me.mQueue;
-
-        // Make sure the identity of this thread is that of the local process,
-        // and keep track of what that identity token actually is.
-        Binder.clearCallingIdentity();
-        final long ident = Binder.clearCallingIdentity();
-
-        // Allow overriding a threshold with a system prop. e.g.
-        // adb shell 'setprop log.looper.1000.main.slow 1 && stop && start'
-        final int thresholdOverride =
-                SystemProperties.getInt("log.looper."
-                        + Process.myUid() + "."
-                        + Thread.currentThread().getName()
-                        + ".slow", 0);
-
-        boolean slowDeliveryDetected = false;
-
+        //  ..
         for (;;) {
-            Message msg = queue.next(); // might block
+            Message msg = queue.next(); //阻塞取消息
             if (msg == null) {
                 // No message indicates that the message queue is quitting.
                 return;
             }
-
-            // This must be in a local variable, in case a UI event sets the logger
-            final Printer logging = me.mLogging;
-            if (logging != null) {
-                logging.println(">>>>> Dispatching to " + msg.target + " " +
-                        msg.callback + ": " + msg.what);
-            }
-
-            final long traceTag = me.mTraceTag;
-            long slowDispatchThresholdMs = me.mSlowDispatchThresholdMs;
-            long slowDeliveryThresholdMs = me.mSlowDeliveryThresholdMs;
-            if (thresholdOverride > 0) {
-                slowDispatchThresholdMs = thresholdOverride;
-                slowDeliveryThresholdMs = thresholdOverride;
-            }
-            final boolean logSlowDelivery = (slowDeliveryThresholdMs > 0) && (msg.when > 0);
-            final boolean logSlowDispatch = (slowDispatchThresholdMs > 0);
-
-            final boolean needStartTime = logSlowDelivery || logSlowDispatch;
-            final boolean needEndTime = logSlowDispatch;
-
-            if (traceTag != 0 && Trace.isTagEnabled(traceTag)) {
-                Trace.traceBegin(traceTag, msg.target.getTraceName(msg));
-            }
-
-            final long dispatchStart = needStartTime ? SystemClock.uptimeMillis() : 0;
-            final long dispatchEnd;
-            try {
-                msg.target.dispatchMessage(msg);
-                dispatchEnd = needEndTime ? SystemClock.uptimeMillis() : 0;
-            } finally {
-                if (traceTag != 0) {
-                    Trace.traceEnd(traceTag);
-                }
-            }
-            if (logSlowDelivery) {
-                if (slowDeliveryDetected) {
-                    if ((dispatchStart - msg.when) <= 10) {
-                        Slog.w(TAG, "Drained");
-                        slowDeliveryDetected = false;
-                    }
-                } else {
-                    if (showSlowLog(slowDeliveryThresholdMs, msg.when, dispatchStart, "delivery",
-                            msg)) {
-                        // Once we write a slow delivery log, suppress until the queue drains.
-                        slowDeliveryDetected = true;
-                    }
-                }
-            }
-            if (logSlowDispatch) {
-                showSlowLog(slowDispatchThresholdMs, dispatchStart, dispatchEnd, "dispatch", msg);
-            }
-
-            if (logging != null) {
-                logging.println("<<<<< Finished to " + msg.target + " " + msg.callback);
-            }
-
-            // Make sure that during the course of dispatching the
-            // identity of the thread wasn't corrupted.
-            final long newIdent = Binder.clearCallingIdentity();
-            if (ident != newIdent) {
-                Log.wtf(TAG, "Thread identity changed from 0x"
-                        + Long.toHexString(ident) + " to 0x"
-                        + Long.toHexString(newIdent) + " while dispatching to "
-                        + msg.target.getClass().getName() + " "
-                        + msg.callback + " what=" + msg.what);
-            }
-
+            // ..
             msg.recycleUnchecked(); // 在消息分发完之后，会执行此来回收消息
         }
     }
 ```
 
-### Handler背后原理
+## Handler背后原理
 - 子线程 handler->sendXXX -> 所有的send或post 最终调用的是 queue.enqueueMessage 往MessageQueue里面添加消息（开启for循环，按消息执行时间，把先执行的消息放到队前，优先执行新的消息。）
 - Looper中loop()方法内开启for循环调用queue.next()取消息，取出消息后调用msg.target.dispatchMessage(msg)，这个target就是Handler；dispatchMessage内部 触发Handler#handlerMessage(msg)
 - 主线程 handler->handleMessage 处理消息
@@ -202,9 +115,7 @@
     Message next() {
         // ...
         for (;;) {
-            if (nextPollTimeoutMillis != 0) {
-                Binder.flushPendingCommands();
-            }
+            //..
 
             nativePollOnce(ptr, nextPollTimeoutMillis);  //睡眠
 
@@ -247,52 +158,7 @@
                     dispose();
                     return null;
                 }
-
-                // If first time idle, then get the number of idlers to run.
-                // Idle handles only run if the queue is empty or if the first message
-                // in the queue (possibly a barrier) is due to be handled in the future.
-                if (pendingIdleHandlerCount < 0
-                        && (mMessages == null || now < mMessages.when)) {
-                    pendingIdleHandlerCount = mIdleHandlers.size();
-                }
-                if (pendingIdleHandlerCount <= 0) {
-                    // No idle handlers to run.  Loop and wait some more.
-                    mBlocked = true;
-                    continue;
-                }
-
-                if (mPendingIdleHandlers == null) {
-                    mPendingIdleHandlers = new IdleHandler[Math.max(pendingIdleHandlerCount, 4)];
-                }
-                mPendingIdleHandlers = mIdleHandlers.toArray(mPendingIdleHandlers);
-            }
-
-            // Run the idle handlers.
-            // We only ever reach this code block during the first iteration.
-            for (int i = 0; i < pendingIdleHandlerCount; i++) {
-                final IdleHandler idler = mPendingIdleHandlers[i];
-                mPendingIdleHandlers[i] = null; // release the reference to the handler
-
-                boolean keep = false;
-                try {
-                    keep = idler.queueIdle();
-                } catch (Throwable t) {
-                    Log.wtf(TAG, "IdleHandler threw exception", t);
-                }
-
-                if (!keep) {
-                    synchronized (this) {
-                        mIdleHandlers.remove(idler);
-                    }
-                }
-            }
-
-            // Reset the idle handler count to 0 so we do not run them again.
-            pendingIdleHandlerCount = 0;
-
-            // While calling an idle handler, a new message could have been delivered
-            // so go back and look again for a pending message without waiting.
-            nextPollTimeoutMillis = 0;
+                // ...
         }
     }
 ```
