@@ -144,7 +144,7 @@
 ```
 
 ### Handler背后原理
-- 子线程 handler->sendXXX -> 所有的send或post 最终调用的是 queue.enqueueMessage 往MessageQueue里面添加消息
+- 子线程 handler->sendXXX -> 所有的send或post 最终调用的是 queue.enqueueMessage 往MessageQueue里面添加消息（开启for循环，按消息执行时间，把先执行的消息放到队前，优先执行新的消息。）
 - Looper中loop()方法内开启for循环调用queue.next()取消息，取出消息后调用msg.target.dispatchMessage(msg)，这个target就是Handler；dispatchMessage内部 触发Handler#handlerMessage(msg)
 - 主线程 handler->handleMessage 处理消息
 ```java
