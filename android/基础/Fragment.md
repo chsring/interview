@@ -28,5 +28,8 @@
 - 当Fragment不可见时，如果你要保留Fragment中的数据以及View的显示状态，那么可以使用add操作，后续中针对不同的状态隐藏和显示不同的Fragment。
 - 当Fragment不可见时，你不需要保留Fragment中的数据以及View的显示状态，那么可以使用replace。
 
+### 懒加载
+- https://www.bilibili.com/video/BV1oa4y1J7qC?p=5&spm_id_from=pageDriver&vd_source=a77b2d1e92c4bda82707549b246c89fe
+
 ### 参考致谢
 - https://www.bilibili.com/video/BV1CL4y1a7Uz?p=4
