@@ -30,6 +30,10 @@
 
 ### 懒加载
 - https://www.bilibili.com/video/BV1oa4y1J7qC?p=5&spm_id_from=pageDriver&vd_source=a77b2d1e92c4bda82707549b246c89fe
+### 懒加载是怎么优化的？通过预加载
+- ArrayList<>里面以前保存了fragment的大量数据的view，通过懒加载，arrayList里面缓存了空白的fragment
+- 空白的fragment 是可见的时候加载，在可见的时候把空白的给替换掉
+- 预加载是不可以避免的
 
 ### 参考致谢
 - https://www.bilibili.com/video/BV1CL4y1a7Uz?p=4

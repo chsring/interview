@@ -50,6 +50,8 @@
                 // No message indicates that the message queue is quitting.
                 return;
             }
+            // ..分发消息 dispatchMessage内部调用了 handler的  handleMessage(msg);来处理消息
+             msg.target.dispatchMessage(msg);
             // ..
             msg.recycleUnchecked(); // 在消息分发完之后，会执行此来回收消息
         }

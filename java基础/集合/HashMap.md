@@ -289,5 +289,8 @@ final HashMap.Node<K,V>[] resize() {
 - 9.部分API不同：HashMap不支持contains(Object value)方法，没有重写toString()方法,而HashTable支持contains(Object value)方法，而且重写了toString()方法
 - 10.同步性不同: Hashtable是同步(synchronized)的，适用于多线程环境, 而hashmap不是同步的，适用于单线程环境。多个线程可以共享一个Hashtable；而如果没有正确的同步的话，多个线程是不能共享HashMap的。
 
+#### HashMap的优化
+- new HashMap() 改成 new HashMap(size/0.75) size为预估大小
+
 
 
