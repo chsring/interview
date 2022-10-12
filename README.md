@@ -67,6 +67,8 @@
 - [Jetpack架构之Lifecycle](./android/框架/Jetpack架构之Lifecycle.md)
 - [Jetpack架构之LiveData](./android/框架/Jetpack架构之Lifecycle.md)
 
+### gradle进阶
+
 
 ### 设计模式
 - [六大原则](./android/设计模式/六大原则.md)

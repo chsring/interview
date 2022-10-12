@@ -277,6 +277,8 @@ public interface LifecycleListener {
 ### 参考致谢
 - https://blog.csdn.net/hymking/article/details/122134041
 - https://blog.csdn.net/a130226123/article/details/119325449#load_677
+### 深入理解glide缓存机制
+- https://blog.csdn.net/u010142437/article/details/80434503
 
 
 

@@ -28,5 +28,18 @@
 
 ### 手写RecyclerView
 
+### notifyDataSetChanged 刷新原理，观察者模式
+- 
+
+### notifyItemChanged 刷新原理
+- Adapter.notifyItemChanged(int position, @Nullable Object payload) 方法会导致 RecyclerView 的 onMeasure() 和 onLayout() 方法调用。
+- 在 onLayout() 方法中会调用 dispatchLayoutStep1()、dispatchLayoutStep2() 和 dispatchLayoutStep3() 三个方法
+- 其中 dispatchLayoutStep1() 将更新信息存储到 ViewHolder 中
+- dispatchLayoutStep2() 进行子 View 的布局，dispatchLayoutStep3()触发动画。在dispatchLayoutStep2()中，会通过DefaultItemAnimator的canReuseUpdatedViewHolder()方法判断position处是否复用之前的ViewHolder，如果调用notifyItemChanged()时的payload不为空，则复用；否则，不复用。在dispatchLayoutStep3()中，如果position处的ViewHolder与之前的ViewHolder相同，则执行DefaultItemAnimator的move动画；如果不同，则执行DefaultItemAnimator的change动画，旧View动画消失（alpha值从1到0），新View动画展现（alpha值从0到1），这样就出现了闪烁效果。
+
+
+
+### AsyncListDiffer原理（性能提升）
+
 ### 参考致谢
 - https://www.bilibili.com/video/BV1Fi4y1x7p5?spm_id_from=333.337.search-card.all.click
