@@ -334,3 +334,6 @@ synchronized 修饰静态方法
 - 因为一旦无消息处理 ，主线程就会block住，意味着主线程没事可干了。一旦消息队列中有了消息，这个就会唤醒这个bolck的地方，next方法就会返回msg
 - 这个问题和ANR风马牛不相及，ANR和Looper没有任何关系。当没有消息处理的时候他Looper是在睡眠，释放线程。卡死是ANR。
 - 每个事件耗时超过限制才会出现ANR，出现ANR才会交给handler处理。
+
+### 同步屏障
+- https://github.com/xfhy/Android-Notes/blob/master/Blogs/Android/%E7%B3%BB%E7%BB%9F%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90/Handler%E5%90%8C%E6%AD%A5%E5%B1%8F%E9%9A%9C.md
