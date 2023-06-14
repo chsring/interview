@@ -7,7 +7,7 @@
 ### finalize
 - finalize是类的方法，垃圾回收前会调用此方法，子类可以重写finalize方法实现对资源的回收
 
-### Serlizable
+### Serializable
 - 是java序列化接口，在硬盘上读写，读写的过程中有大量临时变量产生，内部执行大量的I/O操作，效率很低；
 
 ### Parcelable
